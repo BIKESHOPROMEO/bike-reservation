@@ -3,6 +3,12 @@ body {
   padding: 20px;
 }
 
+h1 {
+  text-align: center;
+  font-size: 1.5em;
+  margin-bottom: 30px;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;
@@ -15,16 +21,15 @@ th, td {
   white-space: pre-line;
 }
 
-/* 曜日色指定 */
-th.sunday, td.sunday {
+/* 横軸（日付）色指定 */
+th.sunday {
   color: red;
 }
-
-th.saturday, td.saturday {
+th.saturday {
   color: blue;
 }
 
-/* 空きなしスタイル（×） */
+/* 空きなしスタイル */
 td.unavailable {
   color: #999;
 }
