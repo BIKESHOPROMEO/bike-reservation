@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <title>バイクショップロミオ多摩店の予約状況</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <h1>バイクショップロミオ多摩店の予約状況</h1>
-    <div class="week-buttons">
-      <button id="prevWeek">先週</button>
-      <button id="nextWeek">翌週</button>
-    </div>
-    <div id="calendar"></div>
-    <script src="main.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>バイクショップロミオ多摩店の予約状況</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>バイクショップロミオ多摩店の予約状況</h1>
+  <div class="nav-buttons">
+    <button onclick="changeWeek(-1)">先週</button>
+    <button onclick="changeWeek(1)">翌週</button>
+  </div>
+  <div class="calendar-container">
+    <table id="calendar-table"></table>
+  </div>
+  <script src="main.js"></script>
+</body>
 </html>
