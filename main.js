@@ -4,7 +4,6 @@ let baseDate = new Date();
 function getWeekDates(base) {
   const sunday = new Date(base);
   sunday.setDate(base.getDate() - base.getDay());
-
   const dates = [];
   for (let i = 0; i < 7; i++) {
     const d = new Date(sunday);
@@ -58,7 +57,7 @@ function renderCalendar() {
         td.dataset.date = formatDate(date);
         td.dataset.time = time;
 
-        td.addEventListener("click", function () {
+        td.addEventListener("click", () => {
           const selectedDate = td.dataset.date;
           const selectedTime = td.dataset.time;
 
@@ -75,6 +74,7 @@ function renderCalendar() {
 
       row.appendChild(td);
     });
+
     calendarTable.appendChild(row);
   });
 }
