@@ -1,22 +1,20 @@
 let currentSunday = getSunday(new Date());
 
 function getSunday(date) {
-  const sunday = new Date(date);
-  sunday.setDate(sunday.getDate() - sunday.getDay());
-  sunday.setHours(0, 0, 0, 0);
-  return sunday;
+  const d = new Date(date);
+  d.setDate(d.getDate() - d.getDay()); // Sunday start
+  d.setHours(0, 0, 0, 0);
+  return d;
 }
 
-function formatDate(date) {
-  return `${date.getMonth() + 1}/${date.getDate()}`;
+function formatDateWithDay(date) {
+  const dayNames = ["日", "月", "火", "水", "木", "金", "土"];
+  return `${date.getMonth() + 1}/${date.getDate()}（${dayNames[date.getDay()]}）`;
 }
 
 function generateCalendar(baseDate) {
   const calendar = document.getElementById("calendar");
   calendar.innerHTML = "";
-
-  const headerRow = document.createElement("div");
-  headerRow.className = "row";
 
   const timeHeader = document.createElement("div");
   timeHeader.className = "cell header";
@@ -26,13 +24,18 @@ function generateCalendar(baseDate) {
   for (let i = 0; i < 7; i++) {
     const day = new Date(baseDate);
     day.setDate(day.getDate() + i);
+
     const cell = document.createElement("div");
     cell.className = "cell header";
-    cell.textContent = formatDate(day);
+
+    if (day.getDay() === 0) cell.classList.add("sunday");
+    if (day.getDay() === 6) cell.classList.add("saturday");
+
+    cell.textContent = formatDateWithDay(day);
     calendar.appendChild(cell);
   }
 
-  for (let hour = 9; hour <= 17; hour++) {
+  for (let hour = 10; hour <= 18; hour++) {
     const timeCell = document.createElement("div");
     timeCell.className = "cell header";
     timeCell.textContent = `${hour}:00`;
@@ -41,7 +44,14 @@ function generateCalendar(baseDate) {
     for (let i = 0; i < 7; i++) {
       const cell = document.createElement("div");
       cell.className = "cell";
-      cell.textContent = "○"; // 空き or 予約可
+
+      const day = new Date(baseDate);
+      day.setDate(day.getDate() + i);
+
+      if (day.getDay() === 0) cell.classList.add("sunday");
+      if (day.getDay() === 6) cell.classList.add("saturday");
+
+      cell.textContent = "◎"; // 状態（◎＝空き、×＝予約済み）など変更可能
       calendar.appendChild(cell);
     }
   }
@@ -50,7 +60,7 @@ function generateCalendar(baseDate) {
   const endDate = new Date(baseDate);
   endDate.setDate(baseDate.getDate() + 6);
   document.getElementById("weekLabel").textContent =
-    `${formatDate(baseDate)} ～ ${formatDate(endDate)}`;
+    `${formatDateWithDay(baseDate)} ～ ${formatDateWithDay(endDate)}`;
 }
 
 // 週移動ボタン
