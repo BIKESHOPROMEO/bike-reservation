@@ -3,7 +3,7 @@ let baseDate = new Date();
 
 function getWeekDates(base) {
   const sunday = new Date(base);
-  sunday.setDate(base.getDate() - base.getDay()); // Sunday of the week
+  sunday.setDate(base.getDate() - base.getDay()); // Sunday
 
   const dates = [];
   for (let i = 0; i < 7; i++) {
@@ -23,11 +23,15 @@ function renderCalendar() {
 
   // Header row
   const headerRow = document.createElement("tr");
+  const timeTh = document.createElement("th");
+  timeTh.textContent = "時間";
+  headerRow.appendChild(timeTh);
+
   weekDates.forEach(date => {
     const th = document.createElement("th");
     const day = date.getDay();
     th.className = day === 0 ? "sunday" : day === 6 ? "saturday" : "";
-    th.textContent = `${date.getMonth() + 1}/${date.getDate}（${weekdays[day]}）`;
+    th.textContent = `${date.getMonth() + 1}/${date.getDate()}（${weekdays[day]}）`;
     headerRow.appendChild(th);
   });
   calendarTable.appendChild(headerRow);
@@ -35,11 +39,16 @@ function renderCalendar() {
   // Time rows
   times.forEach(time => {
     const row = document.createElement("tr");
+    const timeCell = document.createElement("td");
+    timeCell.textContent = time;
+    row.appendChild(timeCell);
+
     weekDates.forEach(() => {
       const td = document.createElement("td");
-      td.textContent = Math.random() < 0.7 ? "◎" : "×"; // ダミー予約状況
+      td.textContent = Math.random() < 0.7 ? "◎" : "×"; // ダミー表示
       row.appendChild(td);
     });
+
     calendarTable.appendChild(row);
   });
 }
