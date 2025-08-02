@@ -17,7 +17,7 @@ h1 {
   flex-wrap: nowrap;
   gap: 0.5em;
   margin-bottom: 1em;
-  overflow-x: auto; /* 小画面で横スクロール対応 */
+  overflow-x: auto;
 }
 
 button,
@@ -65,7 +65,6 @@ button {
   color: blue;
 }
 
-/* 中画面（768px以下）の最適化 */
 @media (max-width: 768px) {
   .cell {
     font-size: 0.8em;
@@ -82,13 +81,7 @@ button {
   }
 }
 
-/* 小画面（480px以下）の最適化 */
 @media (max-width: 480px) {
-  #controls {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
-
   button {
     font-size: 0.8em;
     padding: 0.3em 0.6em;

@@ -2,7 +2,7 @@ let currentSunday = getSunday(new Date());
 
 function getSunday(date) {
   const d = new Date(date);
-  d.setDate(d.getDate() - d.getDay()); // Sunday start
+  d.setDate(d.getDate() - d.getDay());
   d.setHours(0, 0, 0, 0);
   return d;
 }
@@ -51,19 +51,20 @@ function generateCalendar(baseDate) {
       if (day.getDay() === 0) cell.classList.add("sunday");
       if (day.getDay() === 6) cell.classList.add("saturday");
 
-      cell.textContent = "◎"; // 状態（◎＝空き、×＝予約済み）など変更可能
+      cell.textContent = "◎";
       calendar.appendChild(cell);
     }
   }
 
-  // 週ラベル更新
   const endDate = new Date(baseDate);
   endDate.setDate(baseDate.getDate() + 6);
+
   document.getElementById("weekLabel").textContent =
-    `${formatDateWithDay(baseDate)} ～ ${formatDateWithDay(endDate)}`;
+    window.innerWidth < 480
+      ? "今週"
+      : `${formatDateWithDay(baseDate)} ～ ${formatDateWithDay(endDate)}`;
 }
 
-// 週移動ボタン
 document.getElementById("prevWeek").onclick = () => {
   currentSunday.setDate(currentSunday.getDate() - 7);
   generateCalendar(currentSunday);
@@ -74,4 +75,5 @@ document.getElementById("nextWeek").onclick = () => {
   generateCalendar(currentSunday);
 };
 
-generateCalendar(currentSunday);
+window.addEventListener("resize", () => generateCalendar(currentSunday));
+window.addEventListener("DOMContentLoaded", () => generateCalendar(currentSunday));
