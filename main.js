@@ -1,73 +1,50 @@
-// 曜日取得関数
-function getWeekdayString(date) {
-  const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
-  return weekdays[date.getDay()];
-}
+document.addEventListener("DOMContentLoaded", function () {
+  const calendarTable = document.getElementById("calendar");
 
-// 仮の空き状況（false: ×）
-const availability = {
-  // 例：日曜と水曜の一部に×
-  '2025-08-03_10:00': false,
-  '2025-08-03_11:00': false,
-  '2025-08-06_13:00': false,
-};
-
-// カレンダー生成処理
-function generateCalendar() {
-  const calendarDiv = document.getElementById('calendar');
-  const table = document.createElement('table');
-
-  const thead = document.createElement('thead');
-  const headerRow = document.createElement('tr');
-  const emptyCell = document.createElement('th');
-  emptyCell.textContent = '時間';
-  headerRow.appendChild(emptyCell);
-
-  const today = new Date();
-
-  for (let i = 0; i < 7; i++) {
-    const date = new Date(today);
-    date.setDate(today.getDate() + i);
-
-    const weekday = getWeekdayString(date);
-    const dateStr = `${date.getDate()}（${weekday}）`;
-
-    const th = document.createElement('th');
-    th.textContent = dateStr;
-    th.className = date.getDay() === 0 ? 'sunday' : date.getDay() === 6 ? 'saturday' : '';
-
-    headerRow.appendChild(th);
+  function getSunday(date) {
+    const day = date.getDay(); // 0:日曜?6:土曜
+    const sunday = new Date(date);
+    sunday.setDate(date.getDate() - day);
+    return sunday;
   }
 
-  thead.appendChild(headerRow);
-  table.appendChild(thead);
+  function generateCalendar(baseDate) {
+    calendarTable.innerHTML = "";
 
-  const tbody = document.createElement('tbody');
-
-  for (let hour = 10; hour <= 18; hour++) {
-    const row = document.createElement('tr');
-    const timeCell = document.createElement('td');
-    timeCell.textContent = `${hour}:00`;
-    row.appendChild(timeCell);
-
+    // ヘッダー行（曜日）
+    const headerRow = document.createElement("tr");
+    const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
     for (let i = 0; i < 7; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-      const dateKey = date.toISOString().split('T')[0];
-      const key = `${dateKey}_${hour}:00`;
-      const isAvailable = availability[key] ?? true;
-
-      const td = document.createElement('td');
-      td.textContent = isAvailable ? '◎' : '×';
-      if (!isAvailable) td.classList.add('unavailable');
-      row.appendChild(td);
+      const th = document.createElement("th");
+      th.innerText = weekdays[i];
+      th.className = getWeekdayColor(i);
+      headerRow.appendChild(th);
     }
+    calendarTable.appendChild(headerRow);
 
-    tbody.appendChild(row);
+    // 時間スロット（例：10時?18時）
+    for (let hour = 10; hour <= 18; hour++) {
+      const row = document.createElement("tr");
+
+      for (let i = 0; i < 7; i++) {
+        const cell = document.createElement("td");
+        const date = new Date(baseDate);
+        date.setDate(date.getDate() + i);
+        const displayDate = `${date.getMonth() + 1}/${date.getDate()}`;
+        cell.innerHTML = `${displayDate}<br>${hour}:00`;
+        row.appendChild(cell);
+      }
+
+      calendarTable.appendChild(row);
+    }
   }
 
-  table.appendChild(tbody);
-  calendarDiv.appendChild(table);
-}
+  function getWeekdayColor(day) {
+    if (day === 0) return "sunday";   // 赤
+    if (day === 6) return "saturday"; // 青
+    return "";                         // その他は黒
+  }
 
-generateCalendar();
+  const baseDate = getSunday(new Date());
+  generateCalendar(baseDate);
+});
