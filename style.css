@@ -4,6 +4,12 @@ body {
   margin: 20px;
 }
 
+h1 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
 .calendar-wrapper {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -22,6 +28,8 @@ body {
   font-size: 14px;
   text-align: center;
   min-width: 80px;
+
+
 }
 
 #calendar th {
