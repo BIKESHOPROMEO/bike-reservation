@@ -71,3 +71,16 @@ button {
     padding: 0.4em 0.8em;
   }
 }
+
+/* 1. style.css ‚Ìˆê”Ô‰º‚É’Ç‰Á‚·‚é‚Ì‚ª‰¤“¹I */
+@media (max-width: 480px) {
+  button {
+    font-size: 0.8em;
+    padding: 0.3em 0.6em;
+  }
+
+  #controls {
+    flex-direction: column;
+    align-items: center;
+  }
+}
