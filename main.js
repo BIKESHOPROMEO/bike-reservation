@@ -1,82 +1,67 @@
-let currentSunday = getSunday(new Date());
+// 空き状況：true → ◎、false → ×
+const availability = {}; // ここに枠ごとの空き状況を登録（例は仮で true にする）
 
-function getSunday(date) {
-  const day = date.getDay();
-  const sunday = new Date(date);
-  sunday.setDate(date.getDate() - day);
-  return sunday;
+// 曜日を文字で返す関数
+function getWeekdayString(date) {
+  const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+  return weekdays[date.getDay()];
 }
 
-function formatDate(date) {
-  return `${date.getMonth()+1}/${date.getDate()}`;
-}
+// カレンダーを作成
+function generateCalendar() {
+  const calendarDiv = document.getElementById('calendar');
+  const table = document.createElement('table');
 
-function generateCalendar(baseDate) {
-  const dates = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(baseDate);
-    d.setDate(d.getDate() + i);
-    dates.push(d);
-  }
-
-  const hours = [];
-  for (let h = 10; h <= 18; h++) {
-    hours.push(`${h}:00`);
-  }
-
-  const table = document.getElementById('calendar');
-  table.innerHTML = '';
-
+  // 曜日ヘッダー作成
   const thead = document.createElement('thead');
   const headerRow = document.createElement('tr');
-  const firstHeader = document.createElement('th');
-  firstHeader.textContent = '時間＼日付';
-  headerRow.appendChild(firstHeader);
-  dates.forEach(date => {
+  const timeHeader = document.createElement('th');
+  timeHeader.textContent = '時間';
+  headerRow.appendChild(timeHeader);
+
+  for (let i = 0; i < 7; i++) {
     const th = document.createElement('th');
-    th.textContent = formatDate(date);
+    th.textContent = ['日', '月', '火', '水', '木', '金', '土'][i];
+    th.className = i === 0 ? 'sunday' : i === 6 ? 'saturday' : '';
     headerRow.appendChild(th);
-  });
+  }
+
   thead.appendChild(headerRow);
   table.appendChild(thead);
 
+  // 日付ごとに時間枠を生成
   const tbody = document.createElement('tbody');
-  hours.forEach(time => {
+  const today = new Date();
+
+  for (let hour = 10; hour <= 18; hour++) {
     const row = document.createElement('tr');
     const timeCell = document.createElement('td');
-    timeCell.textContent = time;
+    timeCell.textContent = `${hour}:00`;
     row.appendChild(timeCell);
 
-    dates.forEach(date => {
-      const cell = document.createElement('td');
-      const button = document.createElement('button');
-      button.className = 'slot-button';
-      button.textContent = '●';
+    for (let i = 0; i < 7; i++) {
+      const td = document.createElement('td');
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      const dateStr = date.toISOString().split('T')[0]; // yyyy-mm-dd
+      const key = `${dateStr}_${hour}:00`;
+      const isAvailable = availability[key] ?? true; // 未設定なら空きあり
 
-      button.onclick = () => {
-        alert(`${formatDate(date)} ${time} を選択しました`);
-        // 遷移処理はここに追加可能（Prefill URLなど）
-      };
+      const weekday = getWeekdayString(date);
+      td.textContent = `${date.getDate()}（${weekday}）\n${isAvailable ? '◎' : '×'}`;
 
-      cell.appendChild(button);
-      row.appendChild(cell);
-    });
+      // クラス付け
+      td.className = i === 0 ? 'sunday' : i === 6 ? 'saturday' : '';
+      if (!isAvailable) td.classList.add('unavailable');
+
+      row.appendChild(td);
+    }
+
     tbody.appendChild(row);
-  });
-  table.appendChild(tbody);
+  }
 
-  document.getElementById('weekLabel').textContent =
-    `${formatDate(dates[0])} ～ ${formatDate(dates[6])}`;
+  table.appendChild(tbody);
+  calendarDiv.appendChild(table);
 }
 
-document.getElementById('prevWeek').onclick = () => {
-  currentSunday.setDate(currentSunday.getDate() - 7);
-  generateCalendar(currentSunday);
-};
-
-document.getElementById('nextWeek').onclick = () => {
-  currentSunday.setDate(currentSunday.getDate() + 7);
-  generateCalendar(currentSunday);
-};
-
-generateCalendar(currentSunday);
+generateCalendar();
