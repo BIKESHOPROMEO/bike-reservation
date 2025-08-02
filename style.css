@@ -1,7 +1,6 @@
 body {
-  font-family: sans-serif;
-  padding: 1em;
-  background: #f9f9f9;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 h1 {
@@ -40,8 +39,9 @@ button {
 
 #calendar {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(8, minmax(80px, 1fr));
   gap: 0.5em;
+  overflow-x: auto;
 }
 
 .cell {
@@ -81,12 +81,12 @@ button {
   }
 }
 
-@media (max-width: 480px) {
-  button {
-    font-size: 0.8em;
-    padding: 0.3em 0.6em;
-    min-width: 60px;
+@media (max-width: 768px) {
+  #calendar {
+    overflow-x: auto;
+    width: 100%;
   }
+}
 
   #weekLabel {
     font-size: 0.9em;
