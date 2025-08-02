@@ -13,9 +13,18 @@ h1 {
 #controls {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
+  align-items: center;
+  flex-wrap: nowrap;
   gap: 0.5em;
   margin-bottom: 1em;
+  overflow-x: auto; /* 小画面で横スクロール対応 */
+}
+
+button,
+#weekLabel {
+  white-space: nowrap;
+  min-width: auto;
+  flex-shrink: 0;
 }
 
 button {
@@ -56,6 +65,7 @@ button {
   color: blue;
 }
 
+/* 中画面（768px以下）の最適化 */
 @media (max-width: 768px) {
   .cell {
     font-size: 0.8em;
@@ -72,15 +82,20 @@ button {
   }
 }
 
-/* 1. style.css の一番下に追加するのが王道！ */
+/* 小画面（480px以下）の最適化 */
 @media (max-width: 480px) {
+  #controls {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
   button {
     font-size: 0.8em;
     padding: 0.3em 0.6em;
+    min-width: 60px;
   }
 
-  #controls {
-    flex-direction: column;
-    align-items: center;
+  #weekLabel {
+    font-size: 0.9em;
   }
 }
