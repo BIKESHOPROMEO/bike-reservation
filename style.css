@@ -1,111 +1,35 @@
 body {
   font-family: sans-serif;
-  padding: 1em;
-  background: #f9f9f9;
-  margin: 0;
+  padding: 20px;
 }
 
 h1 {
   text-align: center;
-  font-size: 1.5em;
-  margin-bottom: 1em;
-}
-
-#controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: 0.5em;
-  margin-bottom: 1em;
-  overflow-x: auto;
-}
-
-button,
-#weekLabel {
-  white-space: nowrap;
-  min-width: auto;
-  flex-shrink: 0;
-}
-
-button {
-  margin: 0.5em;
-  padding: 0.5em 1em;
-  font-size: 1em;
-}
-
-#weekLabel {
-  font-weight: bold;
-  font-size: 1.1em;
-}
-
-.calendar-wrapper {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 #calendar {
   display: grid;
-  grid-template-columns: repeat(8, minmax(80px, 1fr));
-  gap: 0.5em;
-  min-width: 650px;
-}
-
-.cell {
-  background: #fff;
+  grid-template-columns: repeat(8, auto); /* 1óÒÅFéûä‘Å{7ì˙ï™ */
   border: 1px solid #ccc;
-  padding: 0.5em;
-  text-align: center;
-  font-size: 0.9em;
 }
 
-.header {
-  background: #eee;
+.day-header {
   font-weight: bold;
-}
-
-.sunday {
-  color: red;
+  padding: 5px;
+  border: 1px solid #ccc;
+  text-align: center;
 }
 
 .saturday {
   color: blue;
 }
 
-@media (max-width: 768px) {
-  .cell {
-    font-size: 0.8em;
-    padding: 0.4em;
-  }
-
-  h1 {
-    font-size: 1.2em;
-  }
-
-  button {
-    font-size: 0.9em;
-    padding: 0.4em 0.8em;
-  }
-
-  #calendar {
-    grid-template-columns: repeat(8, minmax(70px, 1fr));
-    min-width: 560px;
-  }
+.sunday {
+  color: red;
 }
 
-@media (max-width: 480px) {
-  button {
-    font-size: 0.8em;
-    padding: 0.3em 0.6em;
-    min-width: 60px;
-  }
-
-  #weekLabel {
-    font-size: 0.9em;
-  }
-
-  #calendar {
-    grid-template-columns: repeat(8, minmax(60px, 1fr));
-    min-width: 500px;
-  }
+.time-slot {
+  padding: 5px;
+  border: 1px solid #ccc;
+  height: 40px;
 }

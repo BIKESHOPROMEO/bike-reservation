@@ -1,79 +1,36 @@
-let currentSunday = getSunday(new Date());
+const calendar = document.getElementById("calendar");
 
-function getSunday(date) {
-  const d = new Date(date);
-  d.setDate(d.getDate() - d.getDay());
-  d.setHours(0, 0, 0, 0);
-  return d;
+// 日付取得（今日から7日）
+const today = new Date();
+const days = [];
+for (let i = 0; i < 7; i++) {
+  const d = new Date(today);
+  d.setDate(today.getDate() + i);
+  const dayStr = `${d.getMonth() + 1}/${d.getDate()}（${["日","月","火","水","木","金","土"][d.getDay()]}）`;
+  days.push({ date: d, label: dayStr });
 }
 
-function formatDateWithDay(date) {
-  const dayNames = ["日", "月", "火", "水", "木", "金", "土"];
-  return `${date.getMonth() + 1}/${date.getDate()}（${dayNames[date.getDay()]}）`;
-}
+// ヘッダー行：空セル + 7日分
+calendar.appendChild(makeCell("時間", "day-header"));
+days.forEach(d => {
+  const className = d.date.getDay() === 6 ? "day-header saturday"
+                  : d.date.getDay() === 0 ? "day-header sunday"
+                  : "day-header";
+  calendar.appendChild(makeCell(d.label, className));
+});
 
-function generateCalendar(baseDate) {
-  const calendar = document.getElementById("calendar");
-  calendar.innerHTML = "";
-
-  const timeHeader = document.createElement("div");
-  timeHeader.className = "cell header";
-  timeHeader.textContent = "時間";
-  calendar.appendChild(timeHeader);
-
+// 10:00～18:00まで1時間おき
+for (let hour = 10; hour <= 18; hour++) {
+  // 時間ラベル（左端）
+  calendar.appendChild(makeCell(`${hour}:00`, "time-slot"));
   for (let i = 0; i < 7; i++) {
-    const day = new Date(baseDate);
-    day.setDate(day.getDate() + i);
-
-    const cell = document.createElement("div");
-    cell.className = "cell header";
-
-    if (day.getDay() === 0) cell.classList.add("sunday");
-    if (day.getDay() === 6) cell.classList.add("saturday");
-
-    cell.textContent = formatDateWithDay(day);
-    calendar.appendChild(cell);
+    calendar.appendChild(makeCell("", "time-slot")); // 予約枠
   }
-
-  for (let hour = 10; hour <= 18; hour++) {
-    const timeCell = document.createElement("div");
-    timeCell.className = "cell header";
-    timeCell.textContent = `${hour}:00`;
-    calendar.appendChild(timeCell);
-
-    for (let i = 0; i < 7; i++) {
-      const cell = document.createElement("div");
-      cell.className = "cell";
-
-      const day = new Date(baseDate);
-      day.setDate(day.getDate() + i);
-
-      if (day.getDay() === 0) cell.classList.add("sunday");
-      if (day.getDay() === 6) cell.classList.add("saturday");
-
-      cell.textContent = "◎";
-      calendar.appendChild(cell);
-    }
-  }
-
-  const endDate = new Date(baseDate);
-  endDate.setDate(baseDate.getDate() + 6);
-
-  document.getElementById("weekLabel").textContent =
-    window.innerWidth < 480
-      ? "今週"
-      : `${formatDateWithDay(baseDate)} ～ ${formatDateWithDay(endDate)}`;
 }
 
-document.getElementById("prevWeek").onclick = () => {
-  currentSunday.setDate(currentSunday.getDate() - 7);
-  generateCalendar(currentSunday);
-};
-
-document.getElementById("nextWeek").onclick = () => {
-  currentSunday.setDate(currentSunday.getDate() + 7);
-  generateCalendar(currentSunday);
-};
-
-window.addEventListener("resize", () => generateCalendar(currentSunday));
-window.addEventListener("DOMContentLoaded", () => generateCalendar(currentSunday));
+function makeCell(content, className) {
+  const cell = document.createElement("div");
+  cell.className = className;
+  cell.textContent = content;
+  return cell;
+}
