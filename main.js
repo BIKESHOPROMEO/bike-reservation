@@ -62,12 +62,12 @@ function renderCalendar() {
           const selectedTime = td.dataset.time;
 
           const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScYI0E_FOFE5JbEKG3Ir56cWBN2PLJ2AQmnQ_Uu33MhRgMs_g/viewform";
-          const queryParams = new URLSearchParams({
-            "entry.1097177404": selectedDate, // 予約日
-            "entry.1500320493": selectedTime  // 予約時間
-          });
-
-          window.open(`${formURL}?${queryParams.toString()}`, "_blank");
+		const queryParams = new URLSearchParams({
+  		"entry.1097177404": "2025/08/04",   // ← yyyy/mm/dd形式にしてみる
+  		"entry.1500320493": "15:00"
+});
+const fullURL = `${formURL}?${queryParams.toString()}`;
+window.open(fullURL, "_blank");
         });
       }
 
