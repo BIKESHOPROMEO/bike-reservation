@@ -1,6 +1,8 @@
 body {
-  max-width: 100%;
-  overflow-x: hidden;
+  font-family: sans-serif;
+  padding: 1em;
+  background: #f9f9f9;
+  margin: 0;
 }
 
 h1 {
@@ -37,11 +39,16 @@ button {
   font-size: 1.1em;
 }
 
+.calendar-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 #calendar {
   display: grid;
   grid-template-columns: repeat(8, minmax(80px, 1fr));
   gap: 0.5em;
-  overflow-x: auto;
+  min-width: 650px;
 }
 
 .cell {
@@ -79,16 +86,26 @@ button {
     font-size: 0.9em;
     padding: 0.4em 0.8em;
   }
-}
 
-@media (max-width: 768px) {
   #calendar {
-    overflow-x: auto;
-    width: 100%;
+    grid-template-columns: repeat(8, minmax(70px, 1fr));
+    min-width: 560px;
   }
 }
 
+@media (max-width: 480px) {
+  button {
+    font-size: 0.8em;
+    padding: 0.3em 0.6em;
+    min-width: 60px;
+  }
+
   #weekLabel {
     font-size: 0.9em;
+  }
+
+  #calendar {
+    grid-template-columns: repeat(8, minmax(60px, 1fr));
+    min-width: 500px;
   }
 }
