@@ -3,7 +3,7 @@ let baseDate = new Date();
 
 function getWeekDates(base) {
   const sunday = new Date(base);
-  sunday.setDate(base.getDate() - base.getDay()); // Sunday起点
+  sunday.setDate(base.getDate() - base.getDay());
 
   const dates = [];
   for (let i = 0; i < 7; i++) {
@@ -18,7 +18,7 @@ function formatDate(date) {
   const yyyy = date.getFullYear();
   const mm = String(date.getMonth() + 1).padStart(2, "0");
   const dd = String(date.getDate()).padStart(2, "0");
-  return `${yyyy}/${mm}/${dd}`; // yyyy/mm/ddでGoogleフォームの記述式対応
+  return `${yyyy}/${mm}/${dd}`;
 }
 
 function renderCalendar() {
@@ -28,7 +28,6 @@ function renderCalendar() {
   const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
   const times = [...Array(9)].map((_, i) => `${10 + i}:00`);
 
-  // ヘッダー行（曜日）
   const headerRow = document.createElement("tr");
   const timeTh = document.createElement("th");
   timeTh.textContent = "時間";
@@ -43,7 +42,6 @@ function renderCalendar() {
   });
   calendarTable.appendChild(headerRow);
 
-  // 時間帯 × 日付セル
   times.forEach(time => {
     const row = document.createElement("tr");
     const timeCell = document.createElement("td");
@@ -77,7 +75,6 @@ function renderCalendar() {
 
       row.appendChild(td);
     });
-
     calendarTable.appendChild(row);
   });
 }
@@ -87,5 +84,4 @@ function changeWeek(offset) {
   renderCalendar();
 }
 
-// 初期表示
 renderCalendar();

@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>バイクショップロミオ多摩店の予約状況</title>
+  <title>設備予約カレンダー</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>バイクショップロミオ多摩店の予約状況</h1>
-  <div class="nav-buttons">
-    <button onclick="changeWeek(-1)">先週</button>
-    <button onclick="changeWeek(1)">翌週</button>
+  <h2 style="text-align:center;">設備予約カレンダー</h2>
+
+  <div class="controls">
+    <button onclick="changeWeek(-1)">? 前週</button>
+    <button onclick="changeWeek(1)">次週 ?</button>
   </div>
-  <div class="calendar-container">
-    <table id="calendar-table"></table>
-  </div>
-  <script src="main.js"></script>
+
+  <table id="calendar-table"></table>
+
+  <script src="script.js"></script>
 </body>
 </html>
