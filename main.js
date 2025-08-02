@@ -1,37 +1,48 @@
-// 空き状況：true → ◎、false → ×
-const availability = {}; // ここに枠ごとの空き状況を登録（例は仮で true にする）
-
-// 曜日を文字で返す関数
+// 曜日取得関数
 function getWeekdayString(date) {
   const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
   return weekdays[date.getDay()];
 }
 
-// カレンダーを作成
+// 仮の空き状況（false: ×）
+const availability = {
+  // 例：日曜と水曜の一部に×
+  '2025-08-03_10:00': false,
+  '2025-08-03_11:00': false,
+  '2025-08-06_13:00': false,
+};
+
+// カレンダー生成処理
 function generateCalendar() {
   const calendarDiv = document.getElementById('calendar');
   const table = document.createElement('table');
 
-  // 曜日ヘッダー作成
   const thead = document.createElement('thead');
   const headerRow = document.createElement('tr');
-  const timeHeader = document.createElement('th');
-  timeHeader.textContent = '時間';
-  headerRow.appendChild(timeHeader);
+  const emptyCell = document.createElement('th');
+  emptyCell.textContent = '時間';
+  headerRow.appendChild(emptyCell);
+
+  const today = new Date();
 
   for (let i = 0; i < 7; i++) {
+    const date = new Date(today);
+    date.setDate(today.getDate() + i);
+
+    const weekday = getWeekdayString(date);
+    const dateStr = `${date.getDate()}（${weekday}）`;
+
     const th = document.createElement('th');
-    th.textContent = ['日', '月', '火', '水', '木', '金', '土'][i];
-    th.className = i === 0 ? 'sunday' : i === 6 ? 'saturday' : '';
+    th.textContent = dateStr;
+    th.className = date.getDay() === 0 ? 'sunday' : date.getDay() === 6 ? 'saturday' : '';
+
     headerRow.appendChild(th);
   }
 
   thead.appendChild(headerRow);
   table.appendChild(thead);
 
-  // 日付ごとに時間枠を生成
   const tbody = document.createElement('tbody');
-  const today = new Date();
 
   for (let hour = 10; hour <= 18; hour++) {
     const row = document.createElement('tr');
@@ -40,20 +51,15 @@ function generateCalendar() {
     row.appendChild(timeCell);
 
     for (let i = 0; i < 7; i++) {
-      const td = document.createElement('td');
       const date = new Date(today);
       date.setDate(today.getDate() + i);
-      const dateStr = date.toISOString().split('T')[0]; // yyyy-mm-dd
-      const key = `${dateStr}_${hour}:00`;
-      const isAvailable = availability[key] ?? true; // 未設定なら空きあり
+      const dateKey = date.toISOString().split('T')[0];
+      const key = `${dateKey}_${hour}:00`;
+      const isAvailable = availability[key] ?? true;
 
-      const weekday = getWeekdayString(date);
-      td.textContent = `${date.getDate()}（${weekday}）\n${isAvailable ? '◎' : '×'}`;
-
-      // クラス付け
-      td.className = i === 0 ? 'sunday' : i === 6 ? 'saturday' : '';
+      const td = document.createElement('td');
+      td.textContent = isAvailable ? '◎' : '×';
       if (!isAvailable) td.classList.add('unavailable');
-
       row.appendChild(td);
     }
 
