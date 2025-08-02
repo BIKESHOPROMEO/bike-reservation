@@ -1,11 +1,18 @@
+// main.js
 document.addEventListener("DOMContentLoaded", function () {
   const calendarTable = document.getElementById("calendar");
 
   function getSunday(date) {
-    const day = date.getDay(); // 0:日曜?6:土曜
+    const day = date.getDay();
     const sunday = new Date(date);
     sunday.setDate(date.getDate() - day);
     return sunday;
+  }
+
+  function getWeekdayColor(day) {
+    if (day === 0) return "sunday";
+    if (day === 6) return "saturday";
+    return "";
   }
 
   function generateCalendar(baseDate) {
@@ -28,30 +35,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     calendarTable.appendChild(headerRow);
 
-    // 時間ごとの行
+    // 時間行
     for (let hour = 10; hour <= 18; hour++) {
       const row = document.createElement("tr");
-
-      // 左端：時間表示
       const timeCell = document.createElement("td");
       timeCell.innerText = `${hour}:00`;
       row.appendChild(timeCell);
 
-      // ◎×セル（ランダム or プレースホルダー）
       for (let i = 0; i < 7; i++) {
         const cell = document.createElement("td");
-        cell.innerText = Math.random() > 0.5 ? "◎" : "×"; // 仮表示
+        const available = Math.random() > 0.5 ? "◎" : "×"; // 仮ロジック
+        cell.innerText = available;
+        cell.setAttribute("data-status", available);
         row.appendChild(cell);
       }
 
       calendarTable.appendChild(row);
     }
-  }
-
-  function getWeekdayColor(day) {
-    if (day === 0) return "sunday";   // 赤
-    if (day === 6) return "saturday"; // 青
-    return "";                         // 平日は黒
   }
 
   const baseDate = getSunday(new Date());
