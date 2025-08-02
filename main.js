@@ -3,7 +3,7 @@ let baseDate = new Date();
 
 function getWeekDates(base) {
   const sunday = new Date(base);
-  sunday.setDate(base.getDate() - base.getDay()); // Sunday
+  sunday.setDate(base.getDate() - base.getDay()); // Sunday起点
 
   const dates = [];
   for (let i = 0; i < 7; i++) {
@@ -14,6 +14,10 @@ function getWeekDates(base) {
   return dates;
 }
 
+function formatDate(date) {
+  return date.toISOString().split("T")[0]; // yyyy-mm-dd
+}
+
 function renderCalendar() {
   calendarTable.innerHTML = "";
 
@@ -21,7 +25,7 @@ function renderCalendar() {
   const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
   const times = [...Array(9)].map((_, i) => `${10 + i}:00`);
 
-  // Header row
+  // Header row（曜日）
   const headerRow = document.createElement("tr");
   const timeTh = document.createElement("th");
   timeTh.textContent = "時間";
@@ -36,16 +40,37 @@ function renderCalendar() {
   });
   calendarTable.appendChild(headerRow);
 
-  // Time rows
+  // Time rows（時間帯 × 日付）
   times.forEach(time => {
     const row = document.createElement("tr");
     const timeCell = document.createElement("td");
     timeCell.textContent = time;
     row.appendChild(timeCell);
 
-    weekDates.forEach(() => {
+    weekDates.forEach(date => {
       const td = document.createElement("td");
-      td.textContent = Math.random() < 0.7 ? "◎" : "×"; // ダミー表示
+      const isAvailable = Math.random() < 0.7;
+      td.textContent = isAvailable ? "◎" : "×";
+
+      if (isAvailable) {
+        td.classList.add("available");
+        td.dataset.date = formatDate(date);
+        td.dataset.time = time;
+
+        td.addEventListener("click", function () {
+          const selectedDate = td.dataset.date;
+          const selectedTime = td.dataset.time;
+
+          const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScYI0E_FOFE5JbEKG3Ir56cWBN2PLJ2AQmnQ_Uu33MhRgMs_g/viewform";
+          const queryParams = new URLSearchParams({
+            "entry.1097177404": selectedDate, // 予約日
+            "entry.1500320493": selectedTime  // 予約時間
+          });
+
+          window.open(`${formURL}?${queryParams.toString()}`, "_blank");
+        });
+      }
+
       row.appendChild(td);
     });
 
