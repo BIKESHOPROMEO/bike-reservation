@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>バイクショップロミオ多摩店の予約状況</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="main.css" />
 </head>
 <body>
   <h2 style="text-align:center;">バイクショップロミオ多摩店の予約状況</h2>
@@ -15,7 +15,33 @@
   </div>
 
   <div class="table-container">
-    <table id="calendar-table"></table>
+    <table id="calendar-table">
+      <thead>
+        <tr>
+          <th class="time-cell">時間</th>
+          <th>月</th>
+          <th>火</th>
+          <th>水</th>
+          <th>木</th>
+          <th>金</th>
+          <th class="saturday">土</th>
+          <th class="sunday">日</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="time-cell">10:00</td>
+          <td class="available">◎</td>
+          <td class="available">×</td>
+          <td class="available">◎</td>
+          <td class="available">×</td>
+          <td class="available">◎</td>
+          <td class="available">×</td>
+          <td class="available">◎</td>
+        </tr>
+        <!-- 他の時間帯もここに追加 -->
+      </tbody>
+    </table>
   </div>
 
   <script src="main.js"></script>
