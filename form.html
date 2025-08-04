@@ -1,44 +1,33 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>バイクショップロミオ多摩店の予約状況</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>予約入力フォーム</title>
 </head>
 <body>
-  <h2>バイクショップロミオ多摩店の予約状況</h2>
+  <h2>ご予約情報の入力</h2>
   <form id="reserveForm">
-    <p>選択日時：<span id="selectedDateTime"></span></p>
-    <input type="hidden" name="date" id="dateInput">
-    <input type="hidden" name="time" id="timeInput">
+    <p>予約日時：<span id="selected-datetime"></span></p>
+    <input type="hidden" name="datetime" id="datetime">
 
     <p>お名前：<input type="text" name="name" required></p>
+    <p>メールアドレス：<input type="email" name="email" required></p>
     <p>電話番号：<input type="tel" name="phone" required></p>
-    <p><button type="submit">予約する</button></p>
+    <p>車種：<input type="text" name="bike" required></p>
+    <p>作業内容：
+      <select name="menu" required>
+        <option value="">選択してください</option>
+        <option value="1ヶ月点検">1ヶ月点検</option>
+        <option value="タイヤ交換">タイヤ交換</option>
+        <option value="オイル交換">オイル交換</option>
+        <option value="その他">その他</option>
+      </select>
+    </p>
+    <p>備考：<textarea name="remarks"></textarea></p>
+    <p><button type="submit">送信</button></p>
   </form>
 
-  <script>
-    const params = new URLSearchParams(location.search);
-    const date = params.get('date');
-    const time = params.get('time');
-
-    document.getElementById("selectedDateTime").textContent = `${date} ${time}`;
-    document.getElementById("dateInput").value = date;
-    document.getElementById("timeInput").value = time;
-
-    document.getElementById("reserveForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const payload = Object.fromEntries(formData.entries());
-
-      await fetch("https://script.google.com/macros/s/【あなたのWebAppURL】/exec", {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: { "Content-Type": "application/json" }
-      });
-
-      alert("予約を受け付けました。ありがとうございます！");
-      e.target.reset();
-    });
-  </script>
+  <script src="form.js"></script>
 </body>
 </html>
