@@ -20,6 +20,12 @@ function formatDate(date) {
   return `${yyyy}/${mm}/${dd}`;
 }
 
+function encodeParams(params) {
+  return Object.entries(params)
+    .map(([key, val]) => `${encodeURIComponent(key)}=${encodeURIComponent(val)}`)
+    .join("&");
+}
+
 function renderCalendar() {
   calendarTable.innerHTML = "";
 
@@ -27,6 +33,7 @@ function renderCalendar() {
   const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
   const times = [...Array(9)].map((_, i) => `${10 + i}:00`);
 
+  // 曜日ヘッダー作成
   const headerRow = document.createElement("tr");
   const timeTh = document.createElement("th");
   timeTh.textContent = "時間";
@@ -41,6 +48,7 @@ function renderCalendar() {
   });
   calendarTable.appendChild(headerRow);
 
+  // 時間ごとの行
   times.forEach(time => {
     const row = document.createElement("tr");
     const timeCell = document.createElement("td");
@@ -61,20 +69,14 @@ function renderCalendar() {
           const selectedDate = td.dataset.date;
           const selectedTime = td.dataset.time;
 
-          const formActionURL = "https://docs.google.com/forms/d/e/1FAIpQLScYI0E_FOFE5JbEKG3Ir56cWBN2PLJ2AQmnQ_Uu33MhRgMs_g/formResponse";
-          const formData = new FormData();
-          formData.append("entry.1913742476", selectedDate);
-          formData.append("entry.741527956", selectedTime);
+          const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScYI0E_FOFE5JbEKG3Ir56cWBN2PLJ2AQmnQ_Uu33MhRgMs_g/viewform";
+          const queryParams = {
+            "entry.1913742476": selectedDate,
+            "entry.741527956": selectedTime
+          };
 
-          fetch(formActionURL, {
-            method: "POST",
-            mode: "no-cors",
-            body: formData
-          }).then(() => {
-            alert(`予約送信しました！\n日時：${selectedDate} ${selectedTime}`);
-          }).catch(() => {
-            alert("送信中にエラーが発生しました。");
-          });
+          const fullURL = `${formURL}?${encodeParams(queryParams)}`;
+          window.open(fullURL, "_blank");
         });
       }
 
