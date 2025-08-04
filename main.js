@@ -1,88 +1,20 @@
-const calendarTable = document.getElementById("calendar-table");
-let baseDate = new Date();
+function doPost(e) {
+  const sheet = SpreadsheetApp.openById("【スプレッドシートID】").getSheetByName("予約");
+  const data = JSON.parse(e.postData.contents);
+  sheet.appendRow([
+    new Date(),  // 受付日時
+    data.date,
+    data.time,
+    data.name,
+    data.phone
+  ]);
 
-function getWeekDates(base) {
-  const sunday = new Date(base);
-  sunday.setDate(base.getDate() - base.getDay());
-  const dates = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(sunday);
-    d.setDate(sunday.getDate() + i);
-    dates.push(d);
-  }
-  return dates;
-}
-
-function formatDate(date) {
-  const yyyy = date.getFullYear();
-  const mm = String(date.getMonth() + 1).padStart(2, "0");
-  const dd = String(date.getDate()).padStart(2, "0");
-  return `${yyyy}/${mm}/${dd}`;
-}
-
-function renderCalendar() {
-  calendarTable.innerHTML = "";
-
-  const weekDates = getWeekDates(baseDate);
-  const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
-  const times = [...Array(9)].map((_, i) => `${10 + i}:00`);
-
-  const headerRow = document.createElement("tr");
-  const timeTh = document.createElement("th");
-  timeTh.textContent = "時間";
-  headerRow.appendChild(timeTh);
-
-  weekDates.forEach(date => {
-    const th = document.createElement("th");
-    const day = date.getDay();
-    th.className = day === 0 ? "sunday" : day === 6 ? "saturday" : "";
-    th.textContent = `${date.getMonth() + 1}/${date.getDate()}（${weekdays[day]}）`;
-    headerRow.appendChild(th);
+  // メール送信（オプション）
+  MailApp.sendEmail({
+    to: "店舗@example.com",
+    subject: "新しい予約が入りました",
+    htmlBody: `日時: ${data.date} ${data.time}<br>名前: ${data.name}<br>電話番号: ${data.phone}`
   });
-  calendarTable.appendChild(headerRow);
 
-  times.forEach(time => {
-    const row = document.createElement("tr");
-    const timeCell = document.createElement("td");
-    timeCell.textContent = time;
-    row.appendChild(timeCell);
-
-    weekDates.forEach(date => {
-      const td = document.createElement("td");
-      const isAvailable = Math.random() < 0.7;
-      td.textContent = isAvailable ? "◎" : "×";
-
-      if (isAvailable) {
-        td.classList.add("available");
-        td.dataset.date = formatDate(date);
-        td.dataset.time = time;
-
-        td.addEventListener("click", () => {
-          const selectedDate = td.dataset.date;
-          const selectedTime = td.dataset.time;
-
-          const formBaseURL = "https://docs.google.com/forms/d/e/1FAIpQLScYI0E_FOFE5JbEKG3Ir56cWBN2PLJ2AQmnQ_Uu33MhRgMs_g/viewform";
-
-          // entry.12 に「日付＋時間」を1つの文字列で渡す
-          const params = new URLSearchParams({
-            "entry.12": `${selectedDate} ${selectedTime}`
-          });
-
-          const fullURL = `${formBaseURL}?${params.toString()}`;
-          window.open(fullURL, "_blank");
-        });
-      }
-
-      row.appendChild(td);
-    });
-
-    calendarTable.appendChild(row);
-  });
+  return ContentService.createTextOutput("Success").setMimeType(ContentService.MimeType.TEXT);
 }
-
-function changeWeek(offset) {
-  baseDate.setDate(baseDate.getDate() + offset * 7);
-  renderCalendar();
-}
-
-renderCalendar();
