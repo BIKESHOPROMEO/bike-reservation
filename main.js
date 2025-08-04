@@ -63,8 +63,8 @@ function renderCalendar() {
 
           const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScYI0E_FOFE5JbEKG3Ir56cWBN2PLJ2AQmnQ_Uu33MhRgMs_g/viewform";
           const queryParams = new URLSearchParams({
-            "entry.2135077923": selectedDate,
-            "entry.2115931154": selectedTime
+            "entry.1913742476": selectedDate,
+            "entry.741527956": selectedTime
           });
 
           const fullURL = `${formURL}?${queryParams.toString()}`;
