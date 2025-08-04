@@ -61,14 +61,20 @@ function renderCalendar() {
           const selectedDate = td.dataset.date;
           const selectedTime = td.dataset.time;
 
-          const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScYI0E_FOFE5JbEKG3Ir56cWBN2PLJ2AQmnQ_Uu33MhRgMs_g/viewform";
-          const queryParams = new URLSearchParams({
-            "entry.1913742476": selectedDate,
-            "entry.741527956": selectedTime
-          });
+          const formActionURL = "https://docs.google.com/forms/d/e/1FAIpQLScYI0E_FOFE5JbEKG3Ir56cWBN2PLJ2AQmnQ_Uu33MhRgMs_g/formResponse";
+          const formData = new FormData();
+          formData.append("entry.1913742476", selectedDate);
+          formData.append("entry.741527956", selectedTime);
 
-          const fullURL = `${formURL}?${queryParams.toString()}`;
-          window.open(fullURL, "_blank");
+          fetch(formActionURL, {
+            method: "POST",
+            mode: "no-cors",
+            body: formData
+          }).then(() => {
+            alert(`予約送信しました！\n日時：${selectedDate} ${selectedTime}`);
+          }).catch(() => {
+            alert("送信中にエラーが発生しました。");
+          });
         });
       }
 
