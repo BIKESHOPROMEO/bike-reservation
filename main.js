@@ -20,12 +20,6 @@ function formatDate(date) {
   return `${yyyy}/${mm}/${dd}`;
 }
 
-function encodeParams(params) {
-  return Object.entries(params)
-    .map(([key, val]) => `${encodeURIComponent(key)}=${encodeURIComponent(val)}`)
-    .join("&");
-}
-
 function renderCalendar() {
   calendarTable.innerHTML = "";
 
@@ -33,7 +27,6 @@ function renderCalendar() {
   const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
   const times = [...Array(9)].map((_, i) => `${10 + i}:00`);
 
-  // 曜日ヘッダー作成
   const headerRow = document.createElement("tr");
   const timeTh = document.createElement("th");
   timeTh.textContent = "時間";
@@ -48,7 +41,6 @@ function renderCalendar() {
   });
   calendarTable.appendChild(headerRow);
 
-  // 時間ごとの行
   times.forEach(time => {
     const row = document.createElement("tr");
     const timeCell = document.createElement("td");
@@ -69,13 +61,15 @@ function renderCalendar() {
           const selectedDate = td.dataset.date;
           const selectedTime = td.dataset.time;
 
-          const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScYI0E_FOFE5JbEKG3Ir56cWBN2PLJ2AQmnQ_Uu33MhRgMs_g/viewform";
-          const queryParams = {
+          const formBaseURL = "https://docs.google.com/forms/d/e/1FAIpQLScYI0E_FOFE5JbEKG3Ir56cWBN2PLJ2AQmnQ_Uu33MhRgMs_g/viewform";
+
+          // entry番号に合わせてクエリパラメータを生成
+          const params = new URLSearchParams({
             "entry.1913742476": selectedDate,
             "entry.741527956": selectedTime
-          };
+          });
 
-          const fullURL = `${formURL}?${encodeParams(queryParams)}`;
+          const fullURL = `${formBaseURL}?${params.toString()}`;
           window.open(fullURL, "_blank");
         });
       }
