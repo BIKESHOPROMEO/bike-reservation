@@ -1,55 +1,55 @@
 body {
   font-family: sans-serif;
-  padding: 1em;
+  padding: 16px;
+}
+
+h2 {
+  text-align: center;
+}
+
+.week-controls {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.table-container {
+  overflow-x: auto;
 }
 
 table {
   border-collapse: collapse;
   width: 100%;
-  max-width: 700px;
-  margin: auto;
+  min-width: 700px;
 }
 
 th, td {
   border: 1px solid #ccc;
+  padding: 8px;
   text-align: center;
-  padding: 0.6em;
+  white-space: nowrap;
 }
 
 th {
-  background: #f0f0f0;
+  background-color: #f0f0f0;
 }
 
-.sunday {
-  color: #e44;
-}
-
-.saturday {
-  color: #44e;
-}
-
-td.available {
-  background: #c9f7c3;
+.selectable {
   cursor: pointer;
-  font-weight: bold;
+  background-color: #e0ffe0;
 }
 
-td:hover.available {
-  background: #9ee19b;
+.unavailable {
+  background-color: #ffe0e0;
 }
 
-td:not(.available) {
-  background: #f6d3d3;
-  color: #aaa;
-}
+@media screen and (max-width: 600px) {
+  table {
+    font-size: 12px;
+    min-width: 500px;
+  }
 
-.controls {
-  text-align: center;
-  margin: 1em 0;
-}
-
-button {
-  padding: 0.4em 1em;
-  margin: 0 0.5em;
-  font-size: 1em;
+  th, td {
+    padding: 6px;
+  }
 }

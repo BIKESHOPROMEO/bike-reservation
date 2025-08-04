@@ -3,20 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <title>予約カレンダー</title>
-  <style>
-    .select-btn { cursor: pointer; padding: 8px 16px; background: #4CAF50; color: white; border-radius: 4px; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>希望日時を選んでください</h2>
-  <p><button class="select-btn" onclick="selectTime('2025-08-10','13:00')">◎ 2025/08/10 13:00</button></p>
-  <p><button class="select-btn" onclick="selectTime('2025-08-11','15:30')">◎ 2025/08/11 15:30</button></p>
+  <h2>予約カレンダー</h2>
 
-  <script>
-    function selectTime(date, time) {
-      const params = new URLSearchParams({ date, time });
-      location.href = `form.html?${params.toString()}`;
-    }
-  </script>
+  <div class="week-controls">
+    <button onclick="changeWeek(-1)">← 先週</button>
+    <span id="week-range"></span>
+    <button onclick="changeWeek(1)">翌週 →</button>
+  </div>
+
+  <div class="table-container">
+    <table id="calendar-table"></table>
+  </div>
+
+  <script src="main.js"></script>
 </body>
 </html>
