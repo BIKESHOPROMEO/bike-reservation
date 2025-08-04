@@ -1,16 +1,21 @@
 body {
   font-family: sans-serif;
-  padding: 16px;
+  padding: 1em;
 }
 
 h2 {
-  text-align: center;
+  font-size: 1.2em;
 }
 
-.week-controls {
-  display: flex;
-  justify-content: space-between;
-  margin: 10px 0;
+.controls {
+  text-align: center;
+  margin: 1em 0;
+}
+
+button {
+  padding: 0.4em 1em;
+  margin: 0 0.5em;
+  font-size: 1em;
 }
 
 .table-container {
@@ -21,35 +26,39 @@ table {
   border-collapse: collapse;
   width: 100%;
   min-width: 700px;
+  margin: auto;
 }
 
 th, td {
   border: 1px solid #ccc;
-  padding: 8px;
   text-align: center;
+  padding: 0.6em;
   white-space: nowrap;
 }
 
 th {
-  background-color: #f0f0f0;
+  background: #f0f0f0;
 }
 
-.selectable {
+.sunday {
+  color: #e44;
+}
+
+.saturday {
+  color: #44e;
+}
+
+td.available {
+  background: #c9f7c3;
   cursor: pointer;
-  background-color: #e0ffe0;
+  font-weight: bold;
 }
 
-.unavailable {
-  background-color: #ffe0e0;
+td:hover.available {
+  background: #9ee19b;
 }
 
-@media screen and (max-width: 600px) {
-  table {
-    font-size: 12px;
-    min-width: 500px;
-  }
-
-  th, td {
-    padding: 6px;
-  }
+td:not(.available) {
+  background: #f6d3d3;
+  color: #aaa;
 }

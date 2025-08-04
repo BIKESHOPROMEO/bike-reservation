@@ -1,37 +1,44 @@
 const calendarTable = document.getElementById("calendar-table");
-const weekRange = document.getElementById("week-range");
+let baseDate = new Date();
 
-let currentDate = new Date(); // 今日基準の週を表示
+function getWeekDates(base) {
+  const sunday = new Date(base);
+  sunday.setDate(base.getDate() - base.getDay());
+  const dates = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(sunday);
+    d.setDate(sunday.getDate() + i);
+    dates.push(d);
+  }
+  return dates;
+}
 
-function changeWeek(offset) {
-  currentDate.setDate(currentDate.getDate() + offset * 7);
-  renderCalendar();
+function formatDate(date) {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  return `${yyyy}/${mm}/${dd}`;
 }
 
 function renderCalendar() {
-  const startOfWeek = new Date(currentDate);
-  startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay()); // 日曜日開始
-  const days = [];
-
-  for (let i = 0; i < 7; i++) {
-    const day = new Date(startOfWeek);
-    day.setDate(day.getDate() + i);
-    days.push(day);
-  }
-
-  const times = ["10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00"];
   calendarTable.innerHTML = "";
 
-  const headerRow = document.createElement("tr");
-  headerRow.appendChild(document.createElement("th")); // 時間列のラベル
+  const weekDates = getWeekDates(baseDate);
+  const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+  const times = [...Array(9)].map((_, i) => `${10 + i}:00`);
 
-  days.forEach(day => {
+  const headerRow = document.createElement("tr");
+  const timeTh = document.createElement("th");
+  timeTh.textContent = "時間";
+  headerRow.appendChild(timeTh);
+
+  weekDates.forEach(date => {
     const th = document.createElement("th");
-    const weekday = ["日","月","火","水","木","金","土"][day.getDay()];
-    th.textContent = `${day.getMonth()+1}/${day.getDate()}(${weekday})`;
+    const day = date.getDay();
+    th.className = day === 0 ? "sunday" : day === 6 ? "saturday" : "";
+    th.textContent = `${date.getMonth() + 1}/${date.getDate()}（${weekdays[day]}）`;
     headerRow.appendChild(th);
   });
-
   calendarTable.appendChild(headerRow);
 
   times.forEach(time => {
@@ -40,32 +47,41 @@ function renderCalendar() {
     timeCell.textContent = time;
     row.appendChild(timeCell);
 
-    days.forEach(day => {
-      const cell = document.createElement("td");
-      const isoDate = day.toISOString().split("T")[0];
+    weekDates.forEach(date => {
+      const td = document.createElement("td");
+      const isAvailable = Math.random() < 0.7;
+      td.textContent = isAvailable ? "◎" : "×";
 
-      const available = Math.random() > 0.3; // ダミーで◎×判定（後で置き換え可）
-      if (available) {
-        cell.classList.add("selectable");
-        cell.textContent = "◎";
-        cell.onclick = () => {
-          const params = new URLSearchParams({ date: isoDate, time });
-          location.href = `form.html?${params.toString()}`;
-        };
-      } else {
-        cell.classList.add("unavailable");
-        cell.textContent = "×";
+      if (isAvailable) {
+        td.classList.add("available");
+        td.dataset.date = formatDate(date);
+        td.dataset.time = time;
+
+        td.addEventListener("click", () => {
+          const selectedDate = td.dataset.date;
+          const selectedTime = td.dataset.time;
+
+          const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScYI0E_FOFE5JbEKG3Ir56cWBN2PLJ2AQmnQ_Uu33MhRgMs_g/viewform";
+          const queryParams = new URLSearchParams({
+            // ?? entry.12 が日付＋時間用の項目ID
+            "entry.12": `${selectedDate} ${selectedTime}`
+          });
+
+          const fullURL = `${formURL}?${queryParams.toString()}`;
+          window.open(fullURL, "_blank");
+        });
       }
 
-      row.appendChild(cell);
+      row.appendChild(td);
     });
 
     calendarTable.appendChild(row);
   });
+}
 
-  const first = days[0];
-  const last = days[6];
-  weekRange.textContent = `${first.getMonth()+1}/${first.getDate()} ? ${last.getMonth()+1}/${last.getDate()}`;
+function changeWeek(offset) {
+  baseDate.setDate(baseDate.getDate() + offset * 7);
+  renderCalendar();
 }
 
 renderCalendar();
