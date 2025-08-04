@@ -24,19 +24,19 @@ function renderCalendar() {
   calendarTable.innerHTML = "";
 
   const weekDates = getWeekDates(baseDate);
-  const weekdays = ["“ú", "ŒŽ", "‰Î", "…", "–Ø", "‹à", "“y"];
+  const weekdays = ["æ—¥", "æœˆ", "ç«", "æ°´", "æœ¨", "é‡‘", "åœŸ"];
   const times = [...Array(9)].map((_, i) => `${10 + i}:00`);
 
   const headerRow = document.createElement("tr");
   const timeTh = document.createElement("th");
-  timeTh.textContent = "ŽžŠÔ";
+  timeTh.textContent = "æ™‚é–“";
   headerRow.appendChild(timeTh);
 
   weekDates.forEach(date => {
     const th = document.createElement("th");
     const day = date.getDay();
     th.className = day === 0 ? "sunday" : day === 6 ? "saturday" : "";
-    th.textContent = `${date.getMonth() + 1}/${date.getDate()}i${weekdays[day]}j`;
+    th.textContent = `${date.getMonth() + 1}/${date.getDate()}ï¼ˆ${weekdays[day]}ï¼‰`;
     headerRow.appendChild(th);
   });
   calendarTable.appendChild(headerRow);
@@ -50,7 +50,7 @@ function renderCalendar() {
     weekDates.forEach(date => {
       const td = document.createElement("td");
       const isAvailable = Math.random() < 0.7;
-      td.textContent = isAvailable ? "" : "~";
+      td.textContent = isAvailable ? "\u25CE" : "\u00D7";  // â—Žï¼šU+25CE, Ã—ï¼šU+00D7
 
       if (isAvailable) {
         td.classList.add("available");
@@ -63,7 +63,7 @@ function renderCalendar() {
 
           const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScYI0E_FOFE5JbEKG3Ir56cWBN2PLJ2AQmnQ_Uu33MhRgMs_g/viewform";
           const queryParams = new URLSearchParams({
-            // ?? entry.12 ‚ª“ú•t{ŽžŠÔ—p‚Ì€–ÚID
+            // ?? entry.12 ãŒæ—¥ä»˜ï¼‹æ™‚é–“ç”¨ã®é …ç›®ID
             "entry.12": `${selectedDate} ${selectedTime}`
           });
 
