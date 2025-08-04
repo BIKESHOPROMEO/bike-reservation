@@ -4,13 +4,11 @@ let baseDate = new Date();
 function getWeekDates(base) {
   const sunday = new Date(base);
   sunday.setDate(base.getDate() - base.getDay());
-  const dates = [];
-  for (let i = 0; i < 7; i++) {
+  return [...Array(7)].map((_, i) => {
     const d = new Date(sunday);
     d.setDate(sunday.getDate() + i);
-    dates.push(d);
-  }
-  return dates;
+    return d;
+  });
 }
 
 function formatDate(date) {
@@ -30,6 +28,7 @@ function renderCalendar() {
   const headerRow = document.createElement("tr");
   const timeTh = document.createElement("th");
   timeTh.textContent = "時間";
+  timeTh.className = "time-cell";
   headerRow.appendChild(timeTh);
 
   weekDates.forEach(date => {
@@ -45,13 +44,13 @@ function renderCalendar() {
     const row = document.createElement("tr");
     const timeCell = document.createElement("td");
     timeCell.textContent = time;
-    timeCell.classList.add("time-cell");
+    timeCell.className = "time-cell";
     row.appendChild(timeCell);
 
     weekDates.forEach(date => {
       const td = document.createElement("td");
       const isAvailable = Math.random() < 0.7;
-      td.textContent = isAvailable ? "\u25CE" : "\u00D7";  // ◎：U+25CE, ×：U+00D7
+      td.textContent = isAvailable ? "◎" : "×";
 
       if (isAvailable) {
         td.classList.add("available");
@@ -59,18 +58,14 @@ function renderCalendar() {
         td.dataset.time = time;
 
         td.addEventListener("click", () => {
-          const selectedDate = td.dataset.date;
-          const selectedTime = td.dataset.time;
-
           const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScYI0E_FOFE5JbEKG3Ir56cWBN2PLJ2AQmnQ_Uu33MhRgMs_g/viewform";
           const queryParams = new URLSearchParams({
-            // ?? entry.12 が日付＋時間用の項目ID
-            "entry.12": `${selectedDate} ${selectedTime}`
+            "entry.12": `${td.dataset.date} ${td.dataset.time}`
           });
-
-          const fullURL = `${formURL}?${queryParams.toString()}`;
-          window.open(fullURL, "_blank");
+          window.open(`${formURL}?${queryParams.toString()}`, "_blank");
         });
+      } else {
+        td.className = "unavailable";
       }
 
       row.appendChild(td);
