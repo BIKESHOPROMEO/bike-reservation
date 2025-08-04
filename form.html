@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>バイクショップロミオ多摩店の予約状況</title>
+</head>
+<body>
+  <h2>バイクショップロミオ多摩店の予約状況</h2>
+  <form id="reserveForm">
+    <p>選択日時：<span id="selectedDateTime"></span></p>
+    <input type="hidden" name="date" id="dateInput">
+    <input type="hidden" name="time" id="timeInput">
+
+    <p>お名前：<input type="text" name="name" required></p>
+    <p>電話番号：<input type="tel" name="phone" required></p>
+    <p><button type="submit">予約する</button></p>
+  </form>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const date = params.get('date');
+    const time = params.get('time');
+
+    document.getElementById("selectedDateTime").textContent = `${date} ${time}`;
+    document.getElementById("dateInput").value = date;
+    document.getElementById("timeInput").value = time;
+
+    document.getElementById("reserveForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const payload = Object.fromEntries(formData.entries());
+
+      await fetch("https://script.google.com/macros/s/【あなたのWebAppURL】/exec", {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json" }
+      });
+
+      alert("予約を受け付けました。ありがとうございます！");
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>
