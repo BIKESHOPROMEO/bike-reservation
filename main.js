@@ -45,6 +45,7 @@ function renderCalendar() {
     const row = document.createElement("tr");
     const timeCell = document.createElement("td");
     timeCell.textContent = time;
+    timeCell.classList.add("time-cell");
     row.appendChild(timeCell);
 
     weekDates.forEach(date => {

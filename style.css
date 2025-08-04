@@ -62,3 +62,10 @@ td:not(.available) {
   background: #f6d3d3;
   color: #aaa;
 }
+
+.time-cell {
+  background-color: #f0f0f0;  /* 日付セルと同じグレー */
+  color: #000000;             /* 黒文字 */
+  font-weight: bold;
+  text-align: center;
+}
